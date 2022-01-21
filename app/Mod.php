@@ -2,36 +2,31 @@
 
 namespace App;
 
+use GuzzleHttp\Client;
+
 class Mod
 {
     /**
      * @var string
      */
-    private $name;
+    public $name;
 
     public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public static function version(): string
+    public function build(string $version): string
     {
-        return '1.0.0';
-    }
+        $name = $this->name . '_' . $version;
+        $staging = Git::directory('./build/' . $this->name . '_' . $version);
 
-    public function build(): string
-    {
-        $name = $this->name . '_' . self::version();
-        $staging = Git::directory('./build/' . $this->name . '_' . self::version());
-
-        if (is_dir($staging)) {
-            // manually unzipped the mod?
-            exec(sprintf('rm -r %s', $staging));
-        }
-
+        if (is_dir($staging)) exec(sprintf('rm -r %s', $staging));
         exec(sprintf('cp -R %s %s', Git::directory('./src'), $staging));
-        exec(sprintf('(cd %s && zip -r %s %s)', Git::directory('./build'), "$name.zip", $name));
 
+        InfoJson::setVersion("{$staging}/info.json", $version);
+
+        exec(sprintf('(cd %s && zip -r %s %s)', Git::directory('./build'), "$name.zip", $name));
         exec(sprintf('rm -r %s', $staging));
 
         return "$staging.zip";
