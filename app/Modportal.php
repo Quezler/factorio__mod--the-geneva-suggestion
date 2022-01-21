@@ -22,6 +22,7 @@ class Modportal
 
     public function version(Mod $mod): Version
     {
-        return new Version($this->full($mod)->releases[0]->version);
+        $releases = $this->full($mod)->releases;
+        return new Version($releases[count($releases) - 1]->version);
     }
 }
