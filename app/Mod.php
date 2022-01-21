@@ -27,7 +27,9 @@ class Mod
         InfoJson::setVersion("{$staging}/info.json", $version);
         Patches::compile($staging);
 
+        if(file_exists($old_zip = "{$staging}.zip")) unlink($old_zip);
         exec(sprintf('(cd %s && zip -r %s %s)', Git::directory('./build'), "$name.zip", $name));
+
         exec(sprintf('rm -r %s', $staging));
 
         return "$staging.zip";
