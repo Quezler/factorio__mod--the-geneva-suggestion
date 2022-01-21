@@ -3,7 +3,6 @@ feature: disables the 5 filter slots on the krastorio 2 loaders
 ]]--
 
 -- data.lua
-
 if mods["miniloader"] and mods["Krastorio2"] then
     data.raw["loader-1x1"]["kr-loader"]         .filter_count = 0
     data.raw["loader-1x1"]["kr-fast-loader"]    .filter_count = 0
@@ -15,7 +14,6 @@ if mods["miniloader"] and mods["Krastorio2"] then
 end
 
 -- data-final-fixes.lua
-
 if mods["miniloader"] and mods["Krastorio2"] and mods["space-exploration"] then
     data.raw["loader-1x1"]["kr-se-loader"]                 .filter_count = 0
     data.raw["loader-1x1"]["kr-se-deep-space-loader-black"].filter_count = 0
