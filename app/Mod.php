@@ -25,6 +25,7 @@ class Mod
         exec(sprintf('cp -R %s %s', Git::directory('./src'), $staging));
 
         InfoJson::setVersion("{$staging}/info.json", $version);
+        Patches::compile($staging);
 
         exec(sprintf('(cd %s && zip -r %s %s)', Git::directory('./build'), "$name.zip", $name));
         exec(sprintf('rm -r %s', $staging));
@@ -35,7 +36,7 @@ class Mod
     public function optional_dependencies(): array
     {
         $mods = [];
-        foreach ((new Finder)->in('src')->files()->contains('mods[') as $lua) {
+        foreach ((new Finder)->in(['src', 'patches'])->files()->contains('mods[') as $lua) {
             preg_match_all('/mods\["(.+)"]/U', file_get_contents($lua), $matches);
             foreach ($matches[1] as $match) {
                 $mods[$match] = true;

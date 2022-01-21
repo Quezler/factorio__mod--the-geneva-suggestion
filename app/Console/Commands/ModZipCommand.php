@@ -6,10 +6,10 @@ use App\Git;
 use App\InfoJson;
 use App\Mod;
 use App\Modportal;
+use LogicException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 class ModZipCommand extends Command
 {
@@ -25,11 +25,11 @@ class ModZipCommand extends Command
             $b = InfoJson::optional_dependencies(Git::directory('./src/info.json'));
 
             if(count($diff = array_diff($a, $b))) {
-                throw new \LogicException("'? ' missing for these mods: " . implode(', ', $diff));
+                throw new LogicException("'? ' missing for these mods: " . implode(', ', $diff));
             }
 
             if(count($diff = array_diff($b, $a))) {
-                throw new \LogicException("'? ' useless for these mods: " . implode(', ', $diff));
+                throw new LogicException("'? ' useless for these mods: " . implode(', ', $diff));
             }
         }
 
