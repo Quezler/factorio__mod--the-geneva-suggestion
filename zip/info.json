@@ -25,6 +25,7 @@
     "! walls-do-not-attach-to-water",
     "! programmable-speaker-typeahead",
     "! ltn-rich-text-converter",
-    "! space-exploration-rocket-fuel-flamethrower-turret"
+    "! space-exploration-rocket-fuel-flamethrower-turret",
+    "! Upgrade_Denied"
   ]
 }

@@ -1,5 +1,6 @@
 local programmable_speaker = require("scripts.programmable-speaker")
-local train_stop           = require("scripts.train_stop")
+local train_stop           = require("scripts.train-stop")
+local upgrade_planner      = require("scripts.upgrade-planner")
 
 script.on_event(defines.events.on_gui_closed, function(event)
     if event.gui_type == defines.gui_type.entity then
@@ -23,4 +24,8 @@ end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
     train_stop.on_robot_built_entity(event)
+end)
+
+script.on_event(defines.events.on_marked_for_upgrade, function(event)
+    upgrade_planner.on_marked_for_upgrade(event)
 end)
