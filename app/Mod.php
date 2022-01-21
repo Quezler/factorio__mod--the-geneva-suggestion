@@ -2,7 +2,7 @@
 
 namespace App;
 
-use GuzzleHttp\Client;
+use Symfony\Component\Finder\Finder;
 
 class Mod
 {
@@ -30,5 +30,19 @@ class Mod
         exec(sprintf('rm -r %s', $staging));
 
         return "$staging.zip";
+    }
+
+    public function optional_dependencies(): array
+    {
+        $mods = [];
+        foreach ((new Finder)->in('src')->files()->contains('mods[') as $lua) {
+            preg_match_all('/mods\["(.+)"]/U', file_get_contents($lua), $matches);
+            foreach ($matches[1] as $match) {
+                $mods[$match] = true;
+            }
+        }
+        $mods = array_keys($mods);
+        sort($mods);
+        return $mods;
     }
 }
