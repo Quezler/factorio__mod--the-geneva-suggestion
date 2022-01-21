@@ -22,7 +22,7 @@ class ModZipCommand extends Command
 
         {
             $a = $mod->optional_dependencies();
-            $b = InfoJson::optional_dependencies(Git::directory('./src/info.json'));
+            $b = InfoJson::optional_dependencies(Git::directory('./zip/info.json'));
 
             if(count($diff = array_diff($a, $b))) {
                 throw new LogicException("'? ' missing for these mods: " . implode(', ', $diff));
