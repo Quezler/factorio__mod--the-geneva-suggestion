@@ -1,12 +1,12 @@
 local rock_repair = {}
 
 local function in_array(entity)
-    for _, e in pairs(global.healing_per_tick) do
-        if entity.surface.index == e.surface.index and entity.position.x == e.position.x and entity.position.y == e.position.y then
-            return true
-        end
+  for _, e in pairs(global.healing_per_tick) do
+    if e.valid and entity.surface.index == e.surface.index and entity.position.x == e.position.x and entity.position.y == e.position.y then
+      return true
     end
-    return false
+  end
+  return false
 end
 
 function rock_repair.init()
@@ -20,9 +20,7 @@ function rock_repair.init()
 end
 
 function rock_repair.on_entity_damaged(event)
-  if event.entity.valid then
-    rock_repair.attempt(event.entity)
-  end
+  rock_repair.attempt(event.entity)
 end
 
 function rock_repair.attempt(entity)
