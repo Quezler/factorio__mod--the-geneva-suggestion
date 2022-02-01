@@ -37,7 +37,7 @@ function rock_repair.on_nth_tick()
   for i = #global.healing_per_tick, 1, -1 do
     local entity = global.healing_per_tick[i]
 
-    if 1 > entity.get_health_ratio() then
+    if entity.valid and 1 > entity.get_health_ratio() then
       entity.health = entity.health + 0.01 * 60
       -- print("✘ " .. entity.name)
     else
