@@ -13,8 +13,8 @@ class Patches
 
             $append_to = null;
             foreach ($lines as $line) {
-                if(str_starts_with($line, '-- ')) {
-                    $append_to = preg_replace('/-- (.*\.lua)/', '$1', $line);
+                if(preg_match('/--\s(.*\.lua)/', $line)) {
+                    $append_to = preg_replace('/--\s(.*\.lua)/', '$1', $line);
                     continue;
                 }
 
