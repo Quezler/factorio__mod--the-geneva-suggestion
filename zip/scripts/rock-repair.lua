@@ -20,7 +20,9 @@ function rock_repair.init()
 end
 
 function rock_repair.on_entity_damaged(event)
-  rock_repair.attempt(event.entity)
+  if event.entity.valid then
+    rock_repair.attempt(event.entity)
+  end
 end
 
 function rock_repair.attempt(entity)
