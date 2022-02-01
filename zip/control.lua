@@ -42,7 +42,7 @@ script.on_configuration_changed(function(event)
   init()
 end)
 
-commands.add_command("baguette", "attempt to feed the leclerc main battletank", function(e)
+commands.add_command("baguette", "- Attempt to feed the leclerc main battletank.", function(e)
   local player = game.get_player(e.player_index)
   if player.admin then
     init()
