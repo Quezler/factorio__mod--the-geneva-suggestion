@@ -2,6 +2,7 @@ local programmable_speaker = require("scripts.programmable-speaker")
 local train_stop           = require("scripts.train-stop")
 local rock_repair          = require("scripts.rock-repair")
 local kr_air_purifier      = require("scripts.kr-air-purifier")
+local buffer_overflow      = require("scripts.buffer-overflow")
 
 -- init
 
@@ -13,6 +14,7 @@ local function init()
   train_stop.on_init()
   rock_repair.init()
   kr_air_purifier.init()
+  buffer_overflow.init()
 end
 
 script.on_init(function()
@@ -36,23 +38,31 @@ end)
 script.on_event(defines.events.on_built_entity, function(event)
     train_stop.on_built_entity(event)
     kr_air_purifier.on_built_entity(event)
-end)
-
-script.on_event(defines.events.on_entity_renamed, function(event)
-    train_stop.on_entity_renamed(event)
+    buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
     train_stop.on_robot_built_entity(event)
     kr_air_purifier.on_robot_built_entity(event)
+    buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_built, function(event)
     kr_air_purifier.script_raised_built(event)
+    buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_revive, function(event)
     kr_air_purifier.script_raised_revive(event)
+    buffer_overflow.on_created_entity(event)
+end)
+
+script.on_event(defines.events.on_entity_cloned, function(event)
+    buffer_overflow.on_created_entity(event)
+end)
+
+script.on_event(defines.events.on_entity_renamed, function(event)
+    train_stop.on_entity_renamed(event)
 end)
 
 script.on_event(defines.events.on_entity_damaged, function(event)
@@ -95,4 +105,5 @@ end)
 script.on_nth_tick(60 * 1, function()
   rock_repair.on_nth_tick()
   kr_air_purifier.on_nth_tick()
+  buffer_overflow.every_second()
 end)

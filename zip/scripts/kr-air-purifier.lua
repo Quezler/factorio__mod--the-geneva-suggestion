@@ -1,3 +1,5 @@
+local construction_robot = require("construction-robot")
+
 local kr_air_purifier = {}
 
 function kr_air_purifier.init()
@@ -17,7 +19,7 @@ function kr_air_purifier.on_built_entity(event)
 
   if entity.name == "kr-air-purifier" then
     table.insert(global["kr-air-purifiers"], entity)
-    deliver_filters_to(entity, 2)
+    construction_robot.deliver(entity, {["pollution-filter"] = 2})
   end
 end
 
@@ -26,7 +28,7 @@ function kr_air_purifier.on_robot_built_entity(event)
 
   if entity.name == "kr-air-purifier" then
     table.insert(global["kr-air-purifiers"], entity)
-    deliver_filters_to(entity, 2)
+    construction_robot.deliver(entity, {["pollution-filter"] = 2})
   end
 end
 
@@ -35,7 +37,7 @@ function kr_air_purifier.script_raised_built(event)
 
   if entity.name == "kr-air-purifier" then
     table.insert(global["kr-air-purifiers"], entity)
-    deliver_filters_to(entity, 2)
+    construction_robot.deliver(entity, {["pollution-filter"] = 2})
   end
 end
 
@@ -44,7 +46,7 @@ function kr_air_purifier.script_raised_revive(event)
 
   if entity.name == "kr-air-purifier" then
     table.insert(global["kr-air-purifiers"], entity)
-    deliver_filters_to(entity, 2)
+    construction_robot.deliver(entity, {["pollution-filter"] = 2})
   end
 end
 
@@ -83,14 +85,8 @@ function kr_air_purifier.on_entity_destroyed(event)
         end
       end
     end
+    table.remove(global.filter_deliveries, event.unit_number)
   end
-end
-
-function deliver_filters_to(entity, count)
-  local filter = "pollution-filter" -- todo: determine best available filter somehow
-  local proxy = entity.surface.create_entity{name = "item-request-proxy", target = entity, modules = {[filter] = count}, position = entity.position, force = entity.force}
-  table.insert(global.filter_deliveries, proxy.unit_number, {surface_index = proxy.surface.index, x = proxy.position.x, y = proxy.position.y})
-  script.register_on_entity_destroyed(proxy)
 end
 
 function kr_air_purifier.on_nth_tick()
@@ -100,9 +96,15 @@ function kr_air_purifier.on_nth_tick()
     if not entity.valid then
       table.remove(global["kr-air-purifiers"], i)
     else
-      if entity.get_inventory(defines.inventory.furnace_source).is_empty() and entity.surface.find_entity("item-request-proxy", {entity.position.x, entity.position.y}) == nil then
-        -- no filters left & no delivery scheduled
-        deliver_filters_to(entity, 1)
+      if entity.get_inventory(defines.inventory.furnace_source).is_empty() then
+      -- filter input slot is empty
+
+        if not construction_robot.pending_delivery(entity) then
+          local proxy = construction_robot.deliver(entity, {["pollution-filter"] = 1})
+          table.insert(global.filter_deliveries, proxy.unit_number, {surface_index = proxy.surface.index, x = proxy.position.x, y = proxy.position.y})
+          script.register_on_entity_destroyed(proxy)
+        end
+
       end
     end
   end
