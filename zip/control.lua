@@ -77,16 +77,16 @@ commands.add_command("se-blueprint-space-rail-ify", "- Replaces normal rails wit
  local stack = player.cursor_stack
  if stack.is_blueprint or stack.is_blueprint_book then
 
-   local bp = stack.export_stack()
-   bp = string.gsub(bp, "^0", "")
-   bp = game.decode_string(bp)
+   local blueprint = stack.export_stack()
+   blueprint = string.gsub(blueprint, "^0", "")
+   blueprint = game.decode_string(blueprint)
 
-   bp = string.gsub(bp, "\"straight%-rail\"", "\"se-space-straight-rail\"")
-   bp = string.gsub(bp, "\"curved%-rail\"", "\"se-space-curved-rail\"")
+   blueprint = string.gsub(blueprint, "\"straight%-rail\"", "\"se-space-straight-rail\"")
+   blueprint = string.gsub(blueprint, "\"curved%-rail\"", "\"se-space-curved-rail\"")
 
-   bp = game.encode_string(bp)
-   bp = "0"..bp
-   stack.import_stack(bp)
+   blueprint = game.encode_string(blueprint)
+   blueprint = "0" .. blueprint
+   stack.import_stack(blueprint)
  end
 end)
 
