@@ -37,27 +37,28 @@ end)
 
 script.on_event(defines.events.on_built_entity, function(event)
     train_stop.on_built_entity(event)
-    kr_air_purifier.on_built_entity(event)
+    kr_air_purifier.on_created_entity(event)
     buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
     train_stop.on_robot_built_entity(event)
-    kr_air_purifier.on_robot_built_entity(event)
+    kr_air_purifier.on_created_entity(event)
     buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_built, function(event)
-    kr_air_purifier.script_raised_built(event)
+    kr_air_purifier.on_created_entity(event)
     buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_revive, function(event)
-    kr_air_purifier.script_raised_revive(event)
+    kr_air_purifier.on_created_entity(event)
     buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_cloned, function(event)
+    kr_air_purifier.on_created_entity(event)
     buffer_overflow.on_created_entity(event)
 end)
 

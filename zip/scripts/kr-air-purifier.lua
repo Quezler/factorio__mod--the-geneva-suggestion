@@ -14,35 +14,9 @@ function kr_air_purifier.init()
     end
 end
 
-function kr_air_purifier.on_built_entity(event)
-  local entity = event.created_entity
-
-  if entity.name == "kr-air-purifier" then
-    table.insert(global["kr-air-purifiers"], entity)
-    construction_robot.deliver(entity, {["pollution-filter"] = 2})
-  end
-end
-
-function kr_air_purifier.on_robot_built_entity(event)
-  local entity = event.created_entity
-
-  if entity.name == "kr-air-purifier" then
-    table.insert(global["kr-air-purifiers"], entity)
-    construction_robot.deliver(entity, {["pollution-filter"] = 2})
-  end
-end
-
-function kr_air_purifier.script_raised_built(event)
-  local entity = event.entity
-
-  if entity.name == "kr-air-purifier" then
-    table.insert(global["kr-air-purifiers"], entity)
-    construction_robot.deliver(entity, {["pollution-filter"] = 2})
-  end
-end
-
-function kr_air_purifier.script_raised_revive(event)
-  local entity = event.entity
+function kr_air_purifier.on_created_entity(event)
+  local entity = event.created_entity or event.entity or event.destination
+  if not (entity and entity.valid) then return end
 
   if entity.name == "kr-air-purifier" then
     table.insert(global["kr-air-purifiers"], entity)
