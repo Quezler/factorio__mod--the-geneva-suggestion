@@ -72,6 +72,23 @@ commands.add_command("baguette", "- Attempt to feed the leclerc main battletank.
   end
 end)
 
+commands.add_command("se-blueprint-space-rail-ify", "- Replaces normal rails with space rails.", function(e)
+ local stack = game.player.cursor_stack
+ if stack.is_blueprint or stack.is_blueprint_book then
+
+   local bp = stack.export_stack()
+   bp = string.gsub(bp, "^0", "")
+   bp = game.decode_string(bp)
+
+   bp = string.gsub(bp, "\"straight%-rail\"", "\"se-space-straight-rail\"")
+   bp = string.gsub(bp, "\"curved%-rail\"", "\"se-space-curved-rail\"")
+
+   bp = game.encode_string(bp)
+   bp = "0"..bp
+   stack.import_stack(bp)
+ end
+end)
+
 -- ticks
 
 script.on_nth_tick(60 * 1, function()
