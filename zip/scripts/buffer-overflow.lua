@@ -36,7 +36,7 @@ directions["east"]  = function(entity) return {{entity.bounding_box.left_top.x  
 directions["south"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y + 1}} end
 directions["west"]  = function(entity) return {{entity.bounding_box.left_top.x - 1, entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y    }} end
 
-local function adjacent_logistic_containers(entity)
+local function adjacent_logistic_points(entity)
   local found_in_the_4_directions = {}
 
   for direction, area in pairs(directions) do
@@ -47,7 +47,7 @@ local function adjacent_logistic_containers(entity)
     })
 
     for _, nearby in pairs(entities) do
-      table.insert(found_in_the_4_directions, nearby)
+      table.insert(found_in_the_4_directions, nearby.get_logistic_point(defines.logistic_member_index.logistic_container))
 --       if nearby.name ~= entity.name then
 --         game.print("Found another logistic container to the " .. direction .. ".")
 --       end
@@ -70,8 +70,7 @@ function buffer_overflow.handle(logistic_point)
 
   if logistic_point.mode == defines.logistic_mode.active_provider then
   -- find an existing buffer chest near this freshly placed active one
-    for _, nearby in pairs(adjacent_logistic_containers(logistic_point.owner)) do
-      nearby_logistic_point = nearby.get_logistic_point(defines.logistic_member_index.logistic_container)
+    for _, nearby_logistic_point in pairs(adjacent_logistic_points(logistic_point.owner)) do
       if nearby_logistic_point.mode == defines.logistic_mode.buffer then
         -- if you find one, pass it on to the if down below
         logistic_point = nearby_logistic_point
@@ -81,8 +80,7 @@ function buffer_overflow.handle(logistic_point)
 
   if logistic_point.mode == defines.logistic_mode.buffer then
   -- find an existing active chest near this freshly placed buffer one
-    for _, nearby in pairs(adjacent_logistic_containers(logistic_point.owner)) do
-      nearby_logistic_point = nearby.get_logistic_point(defines.logistic_member_index.logistic_container)
+    for _, nearby_logistic_point in pairs(adjacent_logistic_points(logistic_point.owner)) do
       if nearby_logistic_point.mode == defines.logistic_mode.active_provider then
       -- if you find one, link them together in a one-way relationship
         -- game.print("✔")
