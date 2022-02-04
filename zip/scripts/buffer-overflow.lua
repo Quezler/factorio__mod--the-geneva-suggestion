@@ -30,11 +30,9 @@ local function items_without_filters(logistic_point)
   return stacks
 end
 
-local directions    = {}
-directions["north"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y - 1}, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y    }} end
-directions["east"]  = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x + 1, entity.bounding_box.right_bottom.y    }} end
-directions["south"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y + 1}} end
-directions["west"]  = function(entity) return {{entity.bounding_box.left_top.x - 1, entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y    }} end
+local directions           = {}
+directions[  "vertically"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y - 1}, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y + 1}} end
+directions["horizontally"] = function(entity) return {{entity.bounding_box.left_top.x - 1, entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x + 1, entity.bounding_box.right_bottom.y    }} end
 
 local function adjacent_logistic_points(entity)
   local found_in_the_4_directions = {}
@@ -47,10 +45,10 @@ local function adjacent_logistic_points(entity)
     })
 
     for _, nearby in pairs(entities) do
-      table.insert(found_in_the_4_directions, nearby.get_logistic_point(defines.logistic_member_index.logistic_container))
---       if nearby.name ~= entity.name then
---         game.print("Found another logistic container to the " .. direction .. ".")
---       end
+      if nearby.name ~= entity.name then
+        -- game.print("Found another logistic container " .. direction .. ".")
+        table.insert(found_in_the_4_directions, nearby.get_logistic_point(defines.logistic_member_index.logistic_container))
+      end
     end
   end
 
