@@ -102,13 +102,13 @@ function buffer_overflow.every_second()
       global["buffer-overflow"]["buffer-logistic-points"][_] = nil
       global["buffer-overflow"]["active-logistic-points"][_] = nil
     else
-      local transfer = items_without_filters(buffer_logistic_point)
-      if table_size(transfer) > 0 then
+      local to_transfer = items_without_filters(buffer_logistic_point)
+      if table_size(to_transfer) > 0 then
 
         local buffer_inventory = buffer_logistic_point.owner.get_inventory(defines.inventory.chest)
         local active_inventory = active_logistic_point.owner.get_inventory(defines.inventory.chest)
   
-        for name, count in pairs(transfer) do
+        for name, count in pairs(to_transfer) do
           local inserted = active_inventory.insert({name = name, count = count})
           buffer_inventory.remove({name = name, count = inserted})
         end
