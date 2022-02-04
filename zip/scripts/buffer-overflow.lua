@@ -30,8 +30,8 @@ local function items_without_filters(logistic_point)
   return stacks
 end
 
-local directions           = {}
-directions[  "vertically"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y - 1}, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y + 1}} end
+local directions = {}
+directions["vertically"  ] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y - 1}, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y + 1}} end
 directions["horizontally"] = function(entity) return {{entity.bounding_box.left_top.x - 1, entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x + 1, entity.bounding_box.right_bottom.y    }} end
 
 local function adjacent_logistic_points(entity)
@@ -103,7 +103,7 @@ function buffer_overflow.every_second()
 
         local buffer_inventory = buffer_logistic_point.owner.get_inventory(defines.inventory.chest)
         local active_inventory = active_logistic_point.owner.get_inventory(defines.inventory.chest)
-  
+
         for name, count in pairs(to_transfer) do
           local inserted = active_inventory.insert({name = name, count = count})
           buffer_inventory.remove({name = name, count = inserted})
