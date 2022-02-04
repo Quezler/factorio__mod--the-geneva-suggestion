@@ -5,13 +5,9 @@ function buffer_overflow.init()
   global["buffer-overflow"]["buffer-logistic-points"] = {} -- keyed by unit_number of the buffer chest
   global["buffer-overflow"]["active-logistic-points"] = {} -- keyed by unit_number of the buffer chest
 
-  for _, force in pairs(game.forces) do
-    for _, logistic_networks in pairs(force.logistic_networks) do
-      for _, logistic_network in pairs(logistic_networks) do
-        for _, logistic_point in pairs(logistic_network.requester_points) do
-          buffer_overflow.handle(logistic_point)
-        end
-      end
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered{type = "logistic-container"}) do
+      buffer_overflow.handle(entity.get_logistic_point(defines.logistic_member_index.logistic_container))
     end
   end
 end
