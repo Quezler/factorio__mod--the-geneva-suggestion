@@ -74,6 +74,14 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
   kr_air_purifier.on_entity_destroyed(event)
 end)
 
+script.on_event(defines.events.on_player_clicked_gps_tag, function(event)
+  local player = game.get_player(event.player_index)
+  if player.cursor_stack and player.cursor_stack.valid_for_read then
+  -- hand was not empty while gps tag was clicked
+    player.zoom_to_world(player.position)
+  end
+end)
+
 -- commands
 
 commands.add_command("baguette", "- Attempt to feed the leclerc main battletank.", function(event)
