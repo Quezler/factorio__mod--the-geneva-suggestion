@@ -35,9 +35,13 @@ class ModZipCommand extends Command
 
         $version = $portal->version($mod);
 
-        $zip = $mod->build($version->incrementPatch());
+        $name_version = $mod->build($version->incrementPatch());
+        $zip = Git::directory("./build/{$name_version}.zip");
 
-        exec('\cp '. $zip .' /Users/quezler/Library/Application\ Support/factorio/mods');
+        $mods_directory = '/Users/quezler/Library/Application\ Support/factorio/mods';
+
+        exec('mv ' . $zip . ' ' . $mods_directory);
+        exec("unzip -o $mods_directory/$name_version -d $mods_directory");
 
         return 0;
     }

@@ -32,7 +32,7 @@ class Mod
 
         exec(sprintf('rm -r %s', $staging));
 
-        return "$staging.zip";
+        return $name;
     }
 
     public function optional_dependencies(): array
