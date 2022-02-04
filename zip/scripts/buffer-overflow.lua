@@ -16,6 +16,7 @@ function buffer_overflow.init()
   end
 end
 
+
 local function items_without_filters(logistic_point)
   local inventory = logistic_point.owner.get_inventory(defines.inventory.chest)
 
@@ -33,14 +34,32 @@ local function items_without_filters(logistic_point)
   return stacks
 end
 
-local function nearby_logistic_containers(entity)
-  return entity.surface.find_entities_filtered({
-    area = {{entity.position.x - 1, entity.position.y - 1}, {entity.position.x + 1, entity.position.y + 1}},
-    type = "logistic-container",
-    force = entity.force,
-  })
-end
+local directions    = {}
+directions["north"] = function(entity) return {{entity.position.x, entity.position.y - 1}, {entity.position.x, entity.position.y}} end
+directions["east"]  = function(entity) return {{entity.position.x, entity.position.y}, {entity.position.x + 1, entity.position.y}} end
+directions["south"] = function(entity) return {{entity.position.x, entity.position.y}, {entity.position.x, entity.position.y + 1}} end
+directions["west"]  = function(entity) return {{entity.position.x - 1, entity.position.y}, {entity.position.x, entity.position.y}} end
 
+local function adjacent_logistic_containers(entity)
+  local found_in_the_4_directions = {}
+
+  for direction, area in pairs(directions) do
+    local entities = entity.surface.find_entities_filtered({
+      area = area(entity),
+      type = "logistic-container",
+      force = entity.force,
+    })
+
+    for _, nearby in pairs(entities) do
+      table.insert(found_in_the_4_directions, nearby)
+--       if nearby.name ~= entity.name then
+--         game.print("Found another logistic container to the " .. direction .. ".")
+--       end
+    end
+  end
+
+  return found_in_the_4_directions
+end
 
 function buffer_overflow.on_created_entity(event)
   local entity = event.created_entity or event.entity or event.destination
@@ -55,7 +74,7 @@ function buffer_overflow.handle(logistic_point)
 
   if logistic_point.mode == defines.logistic_mode.active_provider then
   -- find an existing buffer chest near this freshly placed active one
-    for _, nearby in pairs(nearby_logistic_containers(logistic_point.owner)) do
+    for _, nearby in pairs(adjacent_logistic_containers(logistic_point.owner)) do
       nearby_logistic_point = nearby.get_logistic_point(defines.logistic_member_index.logistic_container)
       if nearby_logistic_point.mode == defines.logistic_mode.buffer then
         -- if you find one, pass it on to the if down below
@@ -66,7 +85,7 @@ function buffer_overflow.handle(logistic_point)
 
   if logistic_point.mode == defines.logistic_mode.buffer then
   -- find an existing active chest near this freshly placed buffer one
-    for _, nearby in pairs(nearby_logistic_containers(logistic_point.owner)) do
+    for _, nearby in pairs(adjacent_logistic_containers(logistic_point.owner)) do
       nearby_logistic_point = nearby.get_logistic_point(defines.logistic_member_index.logistic_container)
       if nearby_logistic_point.mode == defines.logistic_mode.active_provider then
       -- if you find one, link them together in a one-way relationship
