@@ -35,10 +35,10 @@ local function items_without_filters(logistic_point)
 end
 
 local directions    = {}
-directions["north"] = function(entity) return {{entity.position.x, entity.position.y - 1}, {entity.position.x, entity.position.y}} end
-directions["east"]  = function(entity) return {{entity.position.x, entity.position.y}, {entity.position.x + 1, entity.position.y}} end
-directions["south"] = function(entity) return {{entity.position.x, entity.position.y}, {entity.position.x, entity.position.y + 1}} end
-directions["west"]  = function(entity) return {{entity.position.x - 1, entity.position.y}, {entity.position.x, entity.position.y}} end
+directions["north"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y - 1}, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y    }} end
+directions["east"]  = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x + 1, entity.bounding_box.right_bottom.y    }} end
+directions["south"] = function(entity) return {{entity.bounding_box.left_top.x    , entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y + 1}} end
+directions["west"]  = function(entity) return {{entity.bounding_box.left_top.x - 1, entity.bounding_box.left_top.y    }, {entity.bounding_box.right_bottom.x    , entity.bounding_box.right_bottom.y    }} end
 
 local function adjacent_logistic_containers(entity)
   local found_in_the_4_directions = {}
