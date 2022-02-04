@@ -24,9 +24,7 @@ class Scripts
                 $contents = str_replace($define, $const, $contents);
             }
 
-            $prepend[] = "--\n";
-
-            file_put_contents($lua, implode(PHP_EOL, $prepend) . $contents);
+            file_put_contents($lua, implode(' ', $prepend) . ' ' . $contents);
         }
     }
 }
