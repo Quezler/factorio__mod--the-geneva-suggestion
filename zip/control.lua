@@ -28,42 +28,42 @@ end)
 -- events
 
 script.on_event(defines.events.on_gui_closed, function(event)
-    if event.gui_type == defines.gui_type.entity then
-        if(event.entity.name == "programmable-speaker") then
-            programmable_speaker.on_gui_closed(event.entity)
-        end
+  if event.gui_type == defines.gui_type.entity then
+    if(event.entity.name == "programmable-speaker") then
+      programmable_speaker.on_gui_closed(event.entity)
     end
+  end
 end)
 
 script.on_event(defines.events.on_built_entity, function(event)
-    train_stop.on_built_entity(event)
-    kr_air_purifier.on_created_entity(event)
-    buffer_overflow.on_created_entity(event)
+  train_stop.on_built_entity(event)
+  kr_air_purifier.on_created_entity(event)
+  buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
-    train_stop.on_robot_built_entity(event)
-    kr_air_purifier.on_created_entity(event)
-    buffer_overflow.on_created_entity(event)
+  train_stop.on_robot_built_entity(event)
+  kr_air_purifier.on_created_entity(event)
+  buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_built, function(event)
-    kr_air_purifier.on_created_entity(event)
-    buffer_overflow.on_created_entity(event)
+  kr_air_purifier.on_created_entity(event)
+  buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_revive, function(event)
-    kr_air_purifier.on_created_entity(event)
-    buffer_overflow.on_created_entity(event)
+  kr_air_purifier.on_created_entity(event)
+  buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_cloned, function(event)
-    kr_air_purifier.on_created_entity(event)
-    buffer_overflow.on_created_entity(event)
+  kr_air_purifier.on_created_entity(event)
+  buffer_overflow.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_renamed, function(event)
-    train_stop.on_entity_renamed(event)
+  train_stop.on_entity_renamed(event)
 end)
 
 script.on_event(defines.events.on_entity_damaged, function(event)
