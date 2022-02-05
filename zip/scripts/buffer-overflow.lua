@@ -2,6 +2,7 @@ local buffer_overflow = {}
 
 function buffer_overflow.init()
   global["buffer-overflow"] = {}
+  global["buffer-overflow"]["player-highlight-boxes"] = {}
   global["buffer-overflow"]["buffer-logistic-points"] = {} -- keyed by unit_number of the buffer chest
   global["buffer-overflow"]["active-logistic-points"] = {} -- keyed by unit_number of the buffer chest
 
@@ -93,7 +94,7 @@ function buffer_overflow.every_second()
   for _, buffer_logistic_point in pairs(global["buffer-overflow"]["buffer-logistic-points"]) do
     local active_logistic_point = global["buffer-overflow"]["active-logistic-points"][_]
 
-    if not buffer_logistic_point.valid or not active_logistic_point.valid then
+    if not buffer_logistic_point.valid or not active_logistic_point.valid or not buffer_logistic_point.owner.valid or not active_logistic_point.owner.valid then
       -- game.print("✘")
       global["buffer-overflow"]["buffer-logistic-points"][_] = nil
       global["buffer-overflow"]["active-logistic-points"][_] = nil
@@ -109,6 +110,23 @@ function buffer_overflow.every_second()
           buffer_inventory.remove({name = name, count = inserted})
         end
       end
+    end
+  end
+end
+
+function buffer_overflow.on_selected_entity_changed(event)
+  local player = game.get_player(event.player_index)
+
+  if global["buffer-overflow"]["player-highlight-boxes"][event.player_index] then
+     global["buffer-overflow"]["player-highlight-boxes"][event.player_index].destroy()
+     global["buffer-overflow"]["player-highlight-boxes"][event.player_index] = nil
+  end
+
+  if player.selected and player.selected.unit_number then
+    local active_logistic_point = global["buffer-overflow"]["active-logistic-points"][player.selected.unit_number]
+    if active_logistic_point and active_logistic_point.valid and active_logistic_point.owner.valid then
+      local highlight_box = active_logistic_point.owner.surface.create_entity({name = "highlight-box", box_type = "entity", position = active_logistic_point.owner.position, source = active_logistic_point.owner, time_to_live = 60 * 60, render_player_index = event.player_index})
+      global["buffer-overflow"]["player-highlight-boxes"][event.player_index] = highlight_box
     end
   end
 end
