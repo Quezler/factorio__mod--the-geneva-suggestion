@@ -74,6 +74,10 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
   kr_air_purifier.on_entity_destroyed(event)
 end)
 
+script.on_event(defines.events.on_selected_entity_changed, function(event)
+  buffer_overflow.on_selected_entity_changed(event)
+end)
+
 -- commands
 
 commands.add_command("baguette", "- Attempt to feed the leclerc main battletank.", function(event)
