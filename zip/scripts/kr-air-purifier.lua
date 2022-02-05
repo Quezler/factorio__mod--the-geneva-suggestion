@@ -3,12 +3,13 @@ local construction_robot = require("construction-robot")
 local kr_air_purifier = {}
 
 function kr_air_purifier.init()
-  global["kr-air-purifiers"] = {}
+  global["kr-all-air-purifiers"] = {}
+  global["kr-active-air-purifiers"] = {}
   global["pollution-filter-deliveries"] = {}
 
     for _, surface in pairs(game.surfaces) do
       for _, entity in pairs(surface.find_entities_filtered{name = "kr-air-purifier"}) do
-        table.insert(global["kr-air-purifiers"], entity)
+        table.insert(global["kr-all-air-purifiers"], entity)
       end
     end
 end
@@ -18,7 +19,7 @@ function kr_air_purifier.on_created_entity(event)
   if not (purifier and purifier.valid) then return end
 
   if purifier.name == "kr-air-purifier" then
-    table.insert(global["kr-air-purifiers"], purifier)
+    table.insert(global["kr-all-air-purifiers"], purifier)
     local proxy = construction_robot.deliver(purifier, {["pollution-filter"] = 2})
     global["pollution-filter-deliveries"][script.register_on_entity_destroyed(proxy)] = purifier
   end
@@ -30,6 +31,15 @@ function kr_air_purifier.on_entity_destroyed(event)
     global["pollution-filter-deliveries"][event.registration_number] = nil
 
     if purifier and purifier.valid then
+
+      if purifier.get_recipe() then
+      -- started using filter
+        local highlighter = purifier.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = purifier.position, source = purifier, time_to_live = (purifier.get_recipe().energy / purifier.crafting_speed * 60 * (1 - purifier.crafting_progress)) + 1, reender_player_index = 65535})
+        global["kr-active-air-purifiers"][script.register_on_entity_destroyed(highlighter)] = purifier
+      else
+      -- item request proxy got manually removed?
+        kr_air_purifier.refill_if_empty(purifier)
+      end
 
       local used_filters = purifier.get_inventory(defines.inventory.furnace_result)
       if not used_filters.is_empty() then
@@ -52,6 +62,13 @@ function kr_air_purifier.on_entity_destroyed(event)
         end
       end
     end
+  elseif global["kr-active-air-purifiers"][event.registration_number] then
+    local purifier = global["kr-active-air-purifiers"][event.registration_number]
+    global["kr-active-air-purifiers"][event.registration_number] = nil
+
+    if purifier and purifier.valid then
+      kr_air_purifier.refill_if_empty(purifier)
+    end
   end
 end
 
@@ -65,11 +82,11 @@ function kr_air_purifier.refill_if_empty(purifier)
 end
 
 function kr_air_purifier.every_10_seconds()
-  for i = #global["kr-air-purifiers"], 1, -1 do
-    local purifier = global["kr-air-purifiers"][i]
+  for i = #global["kr-all-air-purifiers"], 1, -1 do
+    local purifier = global["kr-all-air-purifiers"][i]
 
     if not purifier.valid then
-      table.remove(global["kr-air-purifiers"], i)
+      table.remove(global["kr-all-air-purifiers"], i)
     else
       kr_air_purifier.refill_if_empty(purifier)
     end
