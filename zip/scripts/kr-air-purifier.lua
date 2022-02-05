@@ -36,7 +36,7 @@ function kr_air_purifier.on_entity_destroyed(event)
 
       if purifier.get_recipe() then
       -- started using filter
-        local highlighter = purifier.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = purifier.position, source = purifier, time_to_live = purifier.get_recipe().energy / purifier.crafting_speed * 60 * (1 - purifier.crafting_progress), reender_player_index = 65535})
+        local highlighter = purifier.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = purifier.position, source = purifier, time_to_live = purifier.get_recipe().energy / purifier.crafting_speed * 60 * (1 - purifier.crafting_progress), render_player_index = 65535})
         global["kr-air-purifier"]["active"][script.register_on_entity_destroyed(highlighter)] = purifier
       else
       -- item request proxy got manually removed?
