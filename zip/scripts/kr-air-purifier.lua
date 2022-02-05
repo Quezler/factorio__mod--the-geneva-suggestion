@@ -34,7 +34,7 @@ function kr_air_purifier.on_entity_destroyed(event)
 
       if purifier.get_recipe() then
       -- started using filter
-        local highlighter = purifier.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = purifier.position, source = purifier, time_to_live = (purifier.get_recipe().energy / purifier.crafting_speed * 60 * (1 - purifier.crafting_progress)) + 1, reender_player_index = 65535})
+        local highlighter = purifier.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = purifier.position, source = purifier, time_to_live = purifier.get_recipe().energy / purifier.crafting_speed * 60 * (1 - purifier.crafting_progress), reender_player_index = 65535})
         global["kr-active-air-purifiers"][script.register_on_entity_destroyed(highlighter)] = purifier
       else
       -- item request proxy got manually removed?
@@ -68,12 +68,19 @@ function kr_air_purifier.on_entity_destroyed(event)
 
     if purifier and purifier.valid then
       kr_air_purifier.refill_if_empty(purifier)
+      --  if purifier.crafting_progress is not 1 in here, it lacked power
     end
   end
 end
 
 function kr_air_purifier.refill_if_empty(purifier)
-  if purifier.get_inventory(defines.inventory.furnace_source).is_empty() then
+  local filters = purifier.get_inventory(defines.inventory.furnace_source).get_item_count()
+  if purifier.crafting_progress == 1 then
+  -- assume the next tick uses one filter
+    filters = filters - 1
+  end
+
+  if 1 > filters then
     if not construction_robot.pending_delivery(purifier) then
       local proxy = construction_robot.deliver(purifier, {["pollution-filter"] = 1})
       global["pollution-filter-deliveries"][script.register_on_entity_destroyed(proxy)] = purifier
