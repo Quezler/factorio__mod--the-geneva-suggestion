@@ -108,6 +108,6 @@ script.on_nth_tick(60 * 1, function()
   buffer_overflow.every_second()
 end)
 
-script.on_nth_tick(60 * 10, function()
-  kr_air_purifier.every_10_seconds()
+script.on_nth_tick(60 * 60 * 5, function()
+  kr_air_purifier.every_five_minutes()
 end)
