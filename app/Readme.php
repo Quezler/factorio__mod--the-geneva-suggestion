@@ -33,7 +33,6 @@ class Readme
 
         $markdown = [];
         $markdown[] = '';
-        $markdown[] = '';
         $markdown[] = 'These optional features are active when each +\'d mod is loaded:';
         $markdown[] = '';
         foreach ($features as $modcombo => $lines) {
@@ -43,10 +42,9 @@ class Readme
             }
             $markdown[] = '';
         }
-        $markdown[] = '';
 
         $md = file_get_contents(Git::directory('README.md'));
-        $md = preg_replace('/(.*##\sFeatures)(.*)(##\s.*)/ms', '$1'. implode(PHP_EOL, $markdown) .'$3', $md);
+        $md = preg_replace('/(.*##\sFeatures\n)(.*)(\n##\s.*)/ms', '$1'. implode(PHP_EOL, $markdown) .'$3', $md);
         file_put_contents(Git::directory('README.md'), $md);
     }
 }

@@ -40,7 +40,7 @@ These optional features are active when each +'d mod is loaded:
 ### krastorio2
 - allows exoskeletons in spidertrons
 - forces oil to be infinite
-- prevent only the krastorio 2 background from showing in the main menu
+- prevents only the krastorio 2 background from showing in the main menu
 
 ### miniloader
 - disables the chute
