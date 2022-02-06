@@ -44,7 +44,7 @@ class Readme
         }
 
         $md = file_get_contents(Git::directory('README.md'));
-        $md = preg_replace('/(.*##\sFeatures\n)(.*)(\n##\s.*)/ms', '$1'. implode(PHP_EOL, $markdown) .'$3', $md);
+        $md = preg_replace('/(.*##\sFeatures\n)(.*)(\n##\s.*)/msU', '$1'. implode(PHP_EOL, $markdown) .'$3', $md);
         file_put_contents(Git::directory('README.md'), $md);
     }
 }
