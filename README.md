@@ -19,39 +19,42 @@ Hence the suggestion part of the name: it does not get in the way of any other m
 
 ## Features
 
-The sections are active if each mod listed in the title is active:
-(might not be 100% up to date, working on code annotations for it)
+These optional features are active when each +'d mod is loaded:
 
-### `*`
+### *
+- prevents walls from graphically connecting to water or cliffs
 
-- walls do not visibly attach to water or cliffs
-- programmable speakers try to icon themselves
+### aai-containers
+- hide the numbers in the item icons
 
-### `aai-containers`
+### aai-containers + krastorio2
+- disables the containers from krastorio 2
 
-- removes the number from the icons
+### base
+- allows big electric poles and substations to fast-replace each other
+- reverses the beacon animation to pulse into the ground
 
-### `miniloader`
+### base + space-exploration
+- allows rocket fuel to be used in flamethrower turrets (115% damage)
 
+### krastorio2
+- allows exoskeletons in spidertrons
+- forces oil to be infinite
+- prevent only the krastorio 2 background from showing in the main menu
+
+### miniloader
 - disables the chute
 - disables energy usage
 
-### `Krastorio2`
+### miniloader + krastorio2
+- force disables unfiltered miniloaders
+- force enables filtered miniloaders
+- force enables krastorio 2 loaders
+- removes the filter slots from the krastorio 2 loaders
+- removes the purple tint from filtered miniloaders
 
-- removes the 5 filter slots from the loaders
-
-### `Krastorio2` & `miniloader`
-
-- removes the 5 filter slots from the krastorio loaders (leave filtering to minis)
-- disables unfiltered miniloaders (to prevent stations from unloading wrong stuff)
-
-### `LogisticTrainNetwork`
-
-- turns rich text in station names into icons only (breaks existing trains in blueprints)
-
-### `space-exploration`
-
-- allows for rocket fuel to be used in flamethrower turrets (115% damage)
+### space-exploration
+- prevents scaffolding ghosts from being placed on asteroids
 
 ## Credits
 

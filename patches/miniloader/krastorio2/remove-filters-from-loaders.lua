@@ -1,6 +1,5 @@
---[[
-feature: disables the 5 filter slots on the krastorio 2 loaders
-]]--
+-- @feature removes the filter slots from the krastorio 2 loaders
+-- @feature removes the purple tint from filtered miniloaders
 
 -- data.lua
 if mods["miniloader"] and mods["Krastorio2"] then

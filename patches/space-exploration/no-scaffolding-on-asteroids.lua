@@ -1,3 +1,5 @@
+-- @feature prevents scaffolding ghosts from being placed on asteroids
+
 -- data-final-fixes.lua
 
 if mods["space-exploration"] then

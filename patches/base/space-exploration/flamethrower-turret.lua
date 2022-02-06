@@ -1,6 +1,4 @@
---[[
-feature: allows for rocket fuel to be used in flamethrower turrets (115% damage)
-]]--
+-- @feature allows rocket fuel to be used in flamethrower turrets (115% damage)
 
 -- data.lua
 if mods["base"] and mods["space-exploration"] then

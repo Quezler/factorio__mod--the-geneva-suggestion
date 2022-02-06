@@ -1,3 +1,5 @@
+-- @feature allows big electric poles and substations to fast-replace each other
+
 -- data.lua
 
 if mods["base"] then

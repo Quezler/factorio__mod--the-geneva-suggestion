@@ -1,6 +1,4 @@
---[[
-feature: prevent walls from visibly connecting to water or cliffs
-]]--
+-- @feature prevents walls from graphically connecting to water or cliffs
 
 -- data-updates.lua
 for name, wall in pairs(data.raw["wall"]) do

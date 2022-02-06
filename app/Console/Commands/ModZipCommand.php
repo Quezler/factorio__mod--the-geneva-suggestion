@@ -6,6 +6,7 @@ use App\Git;
 use App\InfoJson;
 use App\Mod;
 use App\Modportal;
+use App\Readme;
 use LogicException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +43,8 @@ class ModZipCommand extends Command
 
         exec('mv ' . $zip . ' ' . $mods_directory);
         exec("unzip -o $mods_directory/$name_version -d $mods_directory");
+
+        Readme::updateFeatures();
 
         return 0;
     }
