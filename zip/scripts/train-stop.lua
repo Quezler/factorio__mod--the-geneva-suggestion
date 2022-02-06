@@ -1,3 +1,5 @@
+-- @feature converts rich text to their [img= variant on gui close (helps with LTN)
+
 local util = require("util")
 
 local train_stop = {}

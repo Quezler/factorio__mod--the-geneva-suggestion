@@ -1,3 +1,5 @@
+-- @feature construction robots service filters for krastorio 2's air purifiers
+
 local construction_robot = require("construction-robot")
 
 local kr_air_purifier = {}

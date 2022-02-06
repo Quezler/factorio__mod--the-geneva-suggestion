@@ -1,3 +1,5 @@
+-- @feature buffer chests give unwanted items to adjacent active provider chests
+
 local buffer_overflow = {}
 
 function buffer_overflow.init()

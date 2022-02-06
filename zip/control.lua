@@ -80,14 +80,14 @@ end)
 
 -- commands
 
-commands.add_command("baguette", "- Attempt to feed the leclerc main battletank.", function(event)
+commands.add_command("baguette", "- Attempt to reinitialize the leclerc main battletank.", function(event)
   local player = game.get_player(event.player_index)
   if player.admin then
     init()
   end
 end)
 
-commands.add_command("se-blueprint-space-rail-ify", "- Replaces normal rails with space rails.", function(event)
+commands.add_command("se-blueprint-space-rail-ify", "- Replace normal rails with space rails.", function(event)
  local player = game.get_player(event.player_index)
  local stack = player.cursor_stack
  if stack.is_blueprint or stack.is_blueprint_book then

@@ -1,3 +1,5 @@
+-- @feature programmable speakers add the circuit/alert icon to the message on gui close
+
 local util = require("util")
 
 local programmable_speaker = {}

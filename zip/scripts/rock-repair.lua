@@ -1,3 +1,5 @@
+-- @feature damaged rocks heal over time (just like trees)
+
 local rock_repair = {}
 
 local function in_array(entity)

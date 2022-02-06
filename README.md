@@ -22,39 +22,46 @@ Hence the suggestion part of the name: it does not get in the way of any other m
 These optional features are active when each +'d mod is loaded:
 
 ### *
-- prevents walls from graphically connecting to water or cliffs
+- data: prevents walls from graphically connecting to water or cliffs
+- script: converts rich text to their [img= variant on gui close (helps with LTN)
+- script: buffer chests give unwanted items to adjacent active provider chests
+- script: construction robots service filters for krastorio 2's air purifiers
+- script: damaged rocks heal over time (just like trees)
+- script: programmable speakers add the circuit/alert icon to the message on gui close
+- command: baguette (attempt to reinitialize the leclerc main battletank)
+- command: se-blueprint-space-rail-ify (replace normal rails with space rails)
 
 ### aai-containers
-- hide the numbers in the item icons
+- data: hide the numbers in the item icons
 
 ### aai-containers + krastorio2
-- disables the containers from krastorio 2
+- data: disables the containers from krastorio 2
 
 ### base
-- allows big electric poles and substations to fast-replace each other
-- reverses the beacon animation to pulse into the ground
+- data: allows big electric poles and substations to fast-replace each other
+- data: reverses the beacon animation to pulse into the ground
 
 ### base + space-exploration
-- allows rocket fuel to be used in flamethrower turrets (115% damage)
+- data: allows rocket fuel to be used in flamethrower turrets (115% damage)
 
 ### krastorio2
-- allows exoskeletons in spidertrons
-- forces oil to be infinite
-- prevents only the krastorio 2 background from showing in the main menu
+- data: allows exoskeletons in spidertrons
+- data: forces oil to be infinite
+- data: prevents only the krastorio 2 background from showing in the main menu
 
 ### miniloader
-- disables the chute
-- disables energy usage
+- data: disables the chute
+- data: disables energy usage
 
 ### miniloader + krastorio2
-- force disables unfiltered miniloaders
-- force enables filtered miniloaders
-- force enables krastorio 2 loaders
-- removes the filter slots from the krastorio 2 loaders
-- removes the purple tint from filtered miniloaders
+- data: force disables unfiltered miniloaders
+- data: force enables filtered miniloaders
+- data: force enables krastorio 2 loaders
+- data: removes the filter slots from the krastorio 2 loaders
+- data: removes the purple tint from filtered miniloaders
 
 ### space-exploration
-- prevents scaffolding ghosts from being placed on asteroids
+- data: prevents scaffolding ghosts from being placed on asteroids
 
 ## Credits
 
