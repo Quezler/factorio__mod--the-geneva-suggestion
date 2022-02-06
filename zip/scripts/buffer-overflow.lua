@@ -94,7 +94,8 @@ function buffer_overflow.every_second()
   for _, buffer_logistic_point in pairs(global["buffer-overflow"]["buffer-logistic-points"]) do
     local active_logistic_point = global["buffer-overflow"]["active-logistic-points"][_]
 
-    if not buffer_logistic_point.valid or not active_logistic_point.valid or not buffer_logistic_point.owner.valid or not active_logistic_point.owner.valid then
+    if not buffer_logistic_point.valid       or not active_logistic_point.valid
+    or not buffer_logistic_point.owner.valid or not active_logistic_point.owner.valid then
       -- game.print("✘")
       global["buffer-overflow"]["buffer-logistic-points"][_] = nil
       global["buffer-overflow"]["active-logistic-points"][_] = nil
