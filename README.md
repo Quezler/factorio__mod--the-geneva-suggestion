@@ -21,7 +21,7 @@ Hence the suggestion part of the name: it does not get in the way of any other m
 
 These optional features are active when each +'d mod is loaded:
 
-### *
+### (always)
 - data: prevents walls from graphically connecting to water or cliffs
 - script: converts rich text to their [img= variant on gui close (helps with LTN)
 - script: buffer chests give unwanted items to adjacent active provider chests
@@ -65,4 +65,4 @@ These optional features are active when each +'d mod is loaded:
 
 ## Credits
 
-- [thumbnail](https://youtu.be/lnncvVlt2mw?t=88) <!-- Bosnian Ape Society -->
+- [thumbnail](https://youtu.be/lnncvVlt2mw?t=88)

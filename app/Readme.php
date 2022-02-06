@@ -48,6 +48,7 @@ class Readme
         $markdown[] = 'These optional features are active when each +\'d mod is loaded:';
         $markdown[] = '';
         foreach ($features as $modcombo => $lines) {
+            if ($modcombo == "*") $modcombo = "(always)";
             $markdown[] = "### {$modcombo}";
             foreach ($lines as $line) {
                 $markdown[] = "- $line";
