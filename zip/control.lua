@@ -3,6 +3,7 @@ local train_stop           = require("scripts.train-stop")
 local rock_repair          = require("scripts.rock-repair")
 local kr_air_purifier      = require("scripts.kr-air-purifier")
 local buffer_overflow      = require("scripts.buffer-overflow")
+local bloemfontein         = require("scripts.bloemfontein")
 
 -- init
 
@@ -76,6 +77,10 @@ end)
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   buffer_overflow.on_selected_entity_changed(event)
+end)
+
+script.on_event(defines.events.on_train_changed_state, function(event)
+  bloemfontein.on_train_changed_state(event)
 end)
 
 -- commands
