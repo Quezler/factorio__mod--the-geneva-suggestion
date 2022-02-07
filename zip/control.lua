@@ -16,6 +16,7 @@ local function init()
   rock_repair.init()
   kr_air_purifier.init()
   buffer_overflow.init()
+  bloemfontein.init()
 end
 
 script.on_init(function()
@@ -77,6 +78,7 @@ end)
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
   buffer_overflow.on_selected_entity_changed(event)
+  bloemfontein.on_selected_entity_changed(event)
 end)
 
 script.on_event(defines.events.on_train_changed_state, function(event)

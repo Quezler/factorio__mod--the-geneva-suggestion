@@ -26,6 +26,7 @@ These optional features are active when each +'d mod is loaded:
 - script: converts rich text to their [img= variant on gui close (helps with LTN)
 - script: buffer chests give unwanted items to adjacent active provider chests
 - script: construction robots service filters for krastorio 2's air purifiers
+- script: upgrades inserters/conveyors/loaders on the right side of the 2nd train carriage when a train arrives (if the items are present in the construction network)
 - script: damaged rocks heal over time (just like trees)
 - script: programmable speakers add the circuit/alert icon to the message on gui close
 - command: baguette (attempt to reinitialize the leclerc main battletank)
