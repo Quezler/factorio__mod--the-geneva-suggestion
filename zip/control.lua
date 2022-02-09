@@ -4,6 +4,7 @@ local rock_repair          = require("scripts.rock-repair")
 local kr_air_purifier      = require("scripts.kr-air-purifier")
 local buffer_overflow      = require("scripts.buffer-overflow")
 local bloemfontein         = require("scripts.bloemfontein")
+local constant_combinator  = require("scripts.constant-combinator")
 
 -- init
 
@@ -31,8 +32,10 @@ end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
   if event.gui_type == defines.gui_type.entity then
-    if(event.entity.name == "programmable-speaker") then
+    if event.entity.name == "programmable-speaker" then
       programmable_speaker.on_gui_closed(event.entity)
+    elseif event.entity.name == "constant-combinator" then
+      constant_combinator.on_gui_closed(event.entity)
     end
   end
 end)
