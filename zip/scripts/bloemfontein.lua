@@ -75,7 +75,7 @@ function bloemfontein.on_selected_entity_changed(event)
 
     local station = player.selected
 
-    local highlight_box = station.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = station.position, bounding_box = cargo_area_for_station(station), time_to_live = 60 * 60})
+    local highlight_box = station.surface.create_entity({name = "highlight-box", box_type = "train-visualization", position = station.position, bounding_box = cargo_area_for_station(station), time_to_live = 60 * 60, render_player_index = event.player_index})
     global["bloemfontein"]["player-highlight-boxes"][event.player_index] = highlight_box
   end
 end
