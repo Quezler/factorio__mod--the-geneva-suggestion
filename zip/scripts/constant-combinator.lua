@@ -43,14 +43,13 @@ function constant_combinator.on_gui_closed(entity)
           local stack_size = game.item_prototypes[parameter.signal.name].stack_size
 
           if (parameter.count < 0 and request_stack_threshold) or (parameter.count > 0 and provide_stack_threshold) then
-            local old_above_count = above.count
 
             above.signal.type = parameter.signal.type
             above.signal.name = parameter.signal.name
             above.count = (parameter.count * stack_size) - parameter.count
             parameters[above.index] = above
 
-            if above.count ~= old_above_count then
+            if above.count ~= combinator.parameters[above.index].count or above.signal.name ~= combinator.parameters[above.index].signal.name then
               table.insert(text, "[item=" .. parameter.signal.name .. "]")
               table.insert(text, parameter.count)
               table.insert(text, "x")
