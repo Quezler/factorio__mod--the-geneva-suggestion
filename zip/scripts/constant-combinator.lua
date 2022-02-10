@@ -2,6 +2,13 @@
 
 local constant_combinator = {}
 
+--- Check if all but the index are equal.
+--- @param a ConstantCombinatorParameters
+--- @param b ConstantCombinatorParameters
+local function similar(a, b)
+  return a.count == b.count and a.signal.type == b.signal.type and a.signal.name == b.signal.name
+end
+
 function constant_combinator.on_gui_closed(entity)
   --- @type LuaConstantCombinatorControlBehavior?
   local combinator = entity.get_control_behavior()
@@ -49,7 +56,7 @@ function constant_combinator.on_gui_closed(entity)
             above.count = (parameter.count * stack_size) - parameter.count
             parameters[above.index] = above
 
-            if above.count ~= combinator.parameters[above.index].count or above.signal.name ~= combinator.parameters[above.index].signal.name then
+            if not similar(above, combinator.parameters[above.index]) then
               table.insert(text, "[item=" .. parameter.signal.name .. "]")
               table.insert(text, parameter.count)
               table.insert(text, "x")
