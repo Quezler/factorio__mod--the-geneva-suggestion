@@ -24,6 +24,7 @@ These optional features are active when each +'d mod is loaded:
 ### (always)
 - data: prevents walls from graphically connecting to water or cliffs
 - script: nuclear reactors stop using fuel while at max heat
+- script: construction robots refuel nuclear reactors
 - script: converts rich text to their [img= variant on gui close (helps with LTN)
 - script: buffer chests give unwanted items to adjacent active provider chests
 - script: construction robots service filters for krastorio 2's air purifiers

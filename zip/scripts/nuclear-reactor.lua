@@ -1,4 +1,7 @@
 -- @feature nuclear reactors stop using fuel while at max heat
+-- @feature construction robots refuel nuclear reactors
+
+local construction_robot = require("construction-robot")
 
 local nuclear_reactor = {}
 
@@ -40,6 +43,12 @@ function nuclear_reactor.every_10_seconds()
         global["nuclear-reactor"]["critical"][reactor.unit_number] = reactor
       else
         reactor.active = true
+      end
+
+      if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
+        if not construction_robot.pending_delivery(reactor) then
+          local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
+        end
       end
     end
   end
