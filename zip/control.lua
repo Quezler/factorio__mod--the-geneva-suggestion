@@ -1,3 +1,5 @@
+local util = require("scripts.util")
+
 local programmable_speaker = require("scripts.programmable-speaker")
 local train_stop           = require("scripts.train-stop")
 local rock_repair          = require("scripts.rock-repair")
@@ -94,6 +96,22 @@ end)
 
 script.on_event(defines.events.on_train_changed_state, function(event)
   bloemfontein.on_train_changed_state(event)
+end)
+
+script.on_event(defines.events.on_entity_settings_pasted, function(event)
+
+  if event.source.name == "se-meteor-point-defence-container" and event.destination.type == "logistic-container" then
+    if event.destination.prototype.logistic_mode == "requester" or event.destination.prototype.logistic_mode == "buffer" then
+      util.set_logistic_request(event.destination, {name = "se-meteor-point-defence-ammo", count = 5})
+    end
+  end
+
+  if event.source.name == "se-meteor" .. "-defence-container" and event.destination.type == "logistic-container" then
+    if event.destination.prototype.logistic_mode == "requester" or event.destination.prototype.logistic_mode == "buffer" then
+      util.set_logistic_request(event.destination, {name = "se-meteor" .. "-defence-ammo", count = 5})
+    end
+  end
+
 end)
 
 -- commands

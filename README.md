@@ -65,6 +65,7 @@ These optional features are active when each +'d mod is loaded:
 - data: removes the purple tint from filtered miniloaders
 
 ### space-exploration
+- data: copy pasting meteor defence on logistic chest sets an ammo request
 - data: prevents scaffolding ghosts from being placed on asteroids
 
 ## Credits
