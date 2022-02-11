@@ -51,6 +51,7 @@ These optional features are active when each +'d mod is loaded:
 ### krastorio2
 - data: allows exoskeletons in spidertrons
 - data: allows placing rails on creep (including everything else using the ["floor-layer"](https://github.com/wube/factorio-data/blob/master/core/lualib/collision-mask-util.lua))
+- data: add a shortcut tool to measure how many air purifiers you need
 - data: prevents only the krastorio 2 background from showing in the main menu
 
 ### miniloader

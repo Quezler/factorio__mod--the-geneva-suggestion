@@ -8,6 +8,7 @@ local buffer_overflow      = require("scripts.buffer-overflow")
 local bloemfontein         = require("scripts.bloemfontein")
 local constant_combinator  = require("scripts.constant-combinator")
 local nuclear_reactor      = require("scripts.nuclear-reactor")
+local pollution_tool       = require("scripts.pollution-tool")
 
 -- init
 
@@ -112,6 +113,18 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     end
   end
 
+end)
+
+script.on_event(defines.events.on_player_selected_area, function(event)
+  if event.item == "pollution-tool" then
+    pollution_tool.on_player_selected_area(event)
+  end
+end)
+
+script.on_event(defines.events.on_player_alt_selected_area, function(event)
+  if event.item == "pollution-tool" then
+    pollution_tool.on_player_selected_area(event)
+  end
 end)
 
 -- commands
