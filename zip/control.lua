@@ -84,6 +84,7 @@ end, {{filter = "type", type = "simple-entity"}})
 
 script.on_event(defines.events.on_entity_destroyed, function(event)
   kr_air_purifier.on_entity_destroyed(event)
+  nuclear_reactor.on_entity_destroyed(event)
 end)
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
@@ -99,6 +100,7 @@ end)
 
 commands.add_command("baguette", "- Attempt to reinitialize the leclerc main battletank.", function(event)
   local player = game.get_player(event.player_index)
+  player.print(player.admin)
   if player.admin then
     init()
   end

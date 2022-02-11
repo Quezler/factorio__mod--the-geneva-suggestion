@@ -14,6 +14,7 @@ function nuclear_reactor.init()
   global["nuclear-reactor"]["all"] = {}
   global["nuclear-reactor"]["critical"] = {}
   global["nuclear-reactor"]["meltdown"] = {}
+  global["nuclear-reactor"]["resupply"] = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = "reactor", name = "nuclear-reactor"}) do
@@ -28,6 +29,34 @@ function nuclear_reactor.on_created_entity(event)
 
   if reactor.type == "reactor" and reactor.name == "nuclear-reactor" then
     table.insert(global["nuclear-reactor"]["all"], reactor)
+  end
+end
+
+function nuclear_reactor.on_entity_destroyed(event)
+  if global["nuclear-reactor"]["resupply"][event.registration_number] then
+    local reactor = global["nuclear-reactor"]["resupply"][event.registration_number]
+    global["nuclear-reactor"]["resupply"][event.registration_number] = nil
+
+    if reactor and reactor.valid then
+
+      local used = reactor.get_inventory(defines.inventory.burnt_result)
+      if not used.is_empty() then
+
+        local robot = reactor.surface.find_entity("construction-robot", reactor.position)
+        if robot then
+
+          local cargo = robot.get_inventory(defines.inventory.robot_cargo)
+          if cargo.is_empty() then
+
+            for name, count in pairs(used.get_contents()) do
+              cargo.insert({name = name, count = count})
+            end
+
+            used.clear()
+          end
+        end
+      end
+    end
   end
 end
 
@@ -48,6 +77,7 @@ function nuclear_reactor.every_10_seconds()
       if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
         if not construction_robot.pending_delivery(reactor) then
           local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
+          global["nuclear-reactor"]["resupply"][script.register_on_entity_destroyed(proxy)] = reactor
         end
       end
     end
