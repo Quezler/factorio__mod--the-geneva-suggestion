@@ -75,9 +75,14 @@ function nuclear_reactor.every_10_seconds()
       end
 
       if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
-        if not construction_robot.pending_delivery(reactor) then
-          local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
-          global["nuclear-reactor"]["resupply"][script.register_on_entity_destroyed(proxy)] = reactor
+
+        local surrounded_on_all_sides = reactor.neighbours["north"] ~= nil and reactor.neighbours["east"] ~= nil and reactor.neighbours["south"] ~= nil and reactor.neighbours["west"] ~= nil
+        if not surrounded_on_all_sides then
+
+          if not construction_robot.pending_delivery(reactor) then
+            local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
+            global["nuclear-reactor"]["resupply"][script.register_on_entity_destroyed(proxy)] = reactor
+          end
         end
       end
     end
