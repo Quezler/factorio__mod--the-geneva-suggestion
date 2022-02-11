@@ -18,6 +18,7 @@ function pollution_tool.per_minute(entity)
   if entity.prototype.electric_energy_source_prototype then
     return (entity.prototype.electric_energy_source_prototype.emissions * pollution_multiplier) * (entity.prototype.max_energy_usage * energy_multiplier) * (ticks_per_second * seconds_per_minute)
   else
+    game.print("Cannot determine the pollution of: " .. entity.name)
     return 0
   end
 end
