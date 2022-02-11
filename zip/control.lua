@@ -5,6 +5,7 @@ local kr_air_purifier      = require("scripts.kr-air-purifier")
 local buffer_overflow      = require("scripts.buffer-overflow")
 local bloemfontein         = require("scripts.bloemfontein")
 local constant_combinator  = require("scripts.constant-combinator")
+local nuclear_reactor      = require("scripts.nuclear-reactor")
 
 -- init
 
@@ -18,6 +19,7 @@ local function init()
   kr_air_purifier.init()
   buffer_overflow.init()
   bloemfontein.init()
+  nuclear_reactor.init()
 end
 
 script.on_init(function()
@@ -44,27 +46,32 @@ script.on_event(defines.events.on_built_entity, function(event)
   train_stop.on_built_entity(event)
   kr_air_purifier.on_created_entity(event)
   buffer_overflow.on_created_entity(event)
+  nuclear_reactor.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
   train_stop.on_robot_built_entity(event)
   kr_air_purifier.on_created_entity(event)
   buffer_overflow.on_created_entity(event)
+  nuclear_reactor.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_built, function(event)
   kr_air_purifier.on_created_entity(event)
   buffer_overflow.on_created_entity(event)
+  nuclear_reactor.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_revive, function(event)
   kr_air_purifier.on_created_entity(event)
   buffer_overflow.on_created_entity(event)
+  nuclear_reactor.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_cloned, function(event)
   kr_air_purifier.on_created_entity(event)
   buffer_overflow.on_created_entity(event)
+  nuclear_reactor.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_renamed, function(event)
@@ -117,9 +124,18 @@ end)
 
 -- ticks
 
+script.on_nth_tick(1, function()
+  nuclear_reactor.every_tick()
+end)
+
 script.on_nth_tick(60 * 1, function()
   rock_repair.on_nth_tick()
   buffer_overflow.every_second()
+  nuclear_reactor.every_second()
+end)
+
+script.on_nth_tick(60 * 10, function()
+  nuclear_reactor.every_10_seconds()
 end)
 
 script.on_nth_tick(60 * 60 * 5, function()
