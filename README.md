@@ -71,4 +71,12 @@ These optional features are active when each +'d mod is loaded:
 
 ## Credits
 
-- [thumbnail](https://youtu.be/lnncvVlt2mw?t=88)
+- [BosnianApeSociety](https://youtu.be/lnncvVlt2mw?t=88), used a frame from his video as this mod's thumbnail
+
+- [Factorio Discord](https://discord.com/channels/139677590393716737/306402592265732098), lots of help from the people in here :)
+- [Repair Turret](https://mods.factorio.com/mod/Repair_Turret), code studied for grouping `on_created_entity` events
+
+- [Module Inserter](https://mods.factorio.com/mod/ModuleInserter), code studied for the shortcut selection tool
+- [Pollution Calctulator Tool](https://mods.factorio.com/mod/PollutionCalculator), code studied for pollution #/m calculations
+- [Actual Craft Time](https://mods.factorio.com/mod/Actual_Craft_Time), code studied for beacon effect detection
+
