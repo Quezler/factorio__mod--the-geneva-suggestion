@@ -7,6 +7,7 @@ local nuclear_reactor = {}
 
 local critical_threshold = 900
 local meltdown_threshold = 990
+local notgreat_threshold = 999
 
 function nuclear_reactor.init()
   global["nuclear-reactor"] = {}
@@ -115,7 +116,7 @@ function nuclear_reactor.every_tick()
     if not reactor.valid or reactor.temperature < meltdown_threshold then
       global["nuclear-reactor"]["meltdown"][unit_number] = nil
     else
-      if reactor.temperature == 1000 then
+      if reactor.temperature > notgreat_threshold then
          reactor.active = false
       else
          reactor.active = true
