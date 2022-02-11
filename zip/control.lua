@@ -126,7 +126,7 @@ end)
 
 -- ticks
 
-script.on_nth_tick(1, function()
+script.on_event(defines.events.on_tick, function()
   nuclear_reactor.every_tick()
 end)
 
