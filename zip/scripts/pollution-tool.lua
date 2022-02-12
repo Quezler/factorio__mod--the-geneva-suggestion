@@ -2,7 +2,7 @@ local pollution_tool = {}
 
 local ticks_per_second, seconds_per_minute = 60, 60
 
-function round(number, decimals)
+local function round(number, decimals)
     local multiplier = 10 ^ (decimals or 0)
     return math.floor(number * multiplier + 0.5) / multiplier
 end
