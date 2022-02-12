@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "factoriomod",
+            "request": "launch",
+            "name": "Factorio Mod Debug",
+            "factorioPath": "/Applications/factorio.app/Contents/MacOS/factorio"
+        },
+        {
+            "type": "factoriomod",
+            "request": "launch",
+            "name": "Factorio Mod Debug (Settings & Data)",
+            "factorioPath": "/Applications/factorio.app/Contents/MacOS/factorio",
+            "hookSettings": true,
+            "hookData": true
+        },
+        {
+            "type": "factoriomod",
+            "request": "launch",
+            "name": "Factorio Mod Debug (Profile)",
+            "factorioPath": "/Applications/factorio.app/Contents/MacOS/factorio",
+            "hookMode": "profile"
+        }
+    ]
+}
