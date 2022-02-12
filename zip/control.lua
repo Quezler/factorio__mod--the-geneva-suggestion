@@ -157,18 +157,10 @@ end)
 
 -- ticks
 
-script.on_event(defines.events.on_tick, function()
-  nuclear_reactor.every_tick()
-end)
-
 script.on_nth_tick(60 * 1, function()
   rock_repair.on_nth_tick()
   buffer_overflow.every_second()
   nuclear_reactor.every_second()
-end)
-
-script.on_nth_tick(60 * 10, function()
-  nuclear_reactor.every_10_seconds()
 end)
 
 script.on_nth_tick(60 * 60 * 5, function()

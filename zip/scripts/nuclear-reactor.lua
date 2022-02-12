@@ -2,41 +2,40 @@
 -- @feature construction robots refuel nuclear reactors
 
 local construction_robot = require("construction-robot")
+local queue = require("__flib__.queue")
 
 local nuclear_reactor = {}
 
-local critical_threshold = 900
-local meltdown_threshold = 990
-local notgreat_threshold = 999
+-- local deactivate_above =
+-- local reactivate_above =
 
 function nuclear_reactor.init()
   global["nuclear-reactor"] = {}
 
-  global["nuclear-reactor"]["all"] = {}
-  global["nuclear-reactor"]["critical"] = {}
-  global["nuclear-reactor"]["meltdown"] = {}
-  global["nuclear-reactor"]["resupply"] = {}
+  global["nuclear-reactor"]["all"] = queue.new()
+  global["nuclear-reactor"]["overheated"] = queue.new()
+  global["nuclear-reactor"]["proxied"] = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = "reactor", name = "nuclear-reactor"}) do
-      table.insert(global["nuclear-reactor"]["all"], entity)
+      queue.push_right(global["nuclear-reactor"]["all"], entity)
     end
   end
 end
 
 function nuclear_reactor.on_created_entity(event)
-  local reactor = event.created_entity or event.entity or event.destination
-  if not (reactor and reactor.valid) then return end
+  local entity = event.created_entity or event.entity or event.destination
+  if not (entity and entity.valid) then return end
 
-  if reactor.type == "reactor" and reactor.name == "nuclear-reactor" then
-    table.insert(global["nuclear-reactor"]["all"], reactor)
+  if entity.type == "reactor" and entity.name == "nuclear-reactor" then
+    queue.push_left(global["nuclear-reactor"]["all"], entity)
   end
 end
 
 function nuclear_reactor.on_entity_destroyed(event)
-  if global["nuclear-reactor"]["resupply"][event.registration_number] then
-    local reactor = global["nuclear-reactor"]["resupply"][event.registration_number]
-    global["nuclear-reactor"]["resupply"][event.registration_number] = nil
+  if global["nuclear-reactor"]["proxied"][event.registration_number] then
+    local reactor = global["nuclear-reactor"]["proxied"][event.registration_number]
+    global["nuclear-reactor"]["proxied"][event.registration_number] = nil
 
     if reactor and reactor.valid then
 
@@ -61,68 +60,37 @@ function nuclear_reactor.on_entity_destroyed(event)
   end
 end
 
--- loop all reactors every 10 seconds
-function nuclear_reactor.every_10_seconds()
-  for i = #global["nuclear-reactor"]["all"], 1, -1 do
-    local reactor = global["nuclear-reactor"]["all"][i]
+function nuclear_reactor.once()
+  local reactor = queue.pop_left(global["nuclear-reactor"]["all"])
+  if not reactor or not reactor.valid then return end
 
-    if not reactor.valid then
-      table.remove(global["nuclear-reactor"]["all"], i)
-    else
-      if reactor.temperature > critical_threshold then
-        global["nuclear-reactor"]["critical"][reactor.unit_number] = reactor
-      else
-        reactor.active = true
-      end
+  if not reactor.active and reactor.temperature < 750 then
+    reactor.active = true
+  elseif reactor.active and reactor.temperature > 750 then
+    reactor.active = false
+  end
 
-      if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
+  if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
 
-        local surrounded_on_all_sides = reactor.neighbours["north"] ~= nil and reactor.neighbours["east"] ~= nil and reactor.neighbours["south"] ~= nil and reactor.neighbours["west"] ~= nil
-        if not surrounded_on_all_sides then
+    local surrounded_on_all_sides = reactor.neighbours["north"] ~= nil and reactor.neighbours["east"] ~= nil and reactor.neighbours["south"] ~= nil and reactor.neighbours["west"] ~= nil
+    if not surrounded_on_all_sides then
 
-          if not construction_robot.pending_delivery(reactor) then
-            local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
-            global["nuclear-reactor"]["resupply"][script.register_on_entity_destroyed(proxy)] = reactor
-          end
-        end
+      if not construction_robot.pending_delivery(reactor) then
+        local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
+        global["nuclear-reactor"]["proxied"][script.register_on_entity_destroyed(proxy)] = reactor
       end
     end
   end
 
-  -- game.print("critical: " .. table_size(global["nuclear-reactor"]["critical"]))
-  -- game.print("meltdown: " .. table_size(global["nuclear-reactor"]["meltdown"]))
+  queue.push_right(global["nuclear-reactor"]["all"], reactor)
 end
 
--- reactors that are above `critical_threshold` should be checked more often
 function nuclear_reactor.every_second()
-  for unit_number, reactor in pairs(global["nuclear-reactor"]["critical"]) do
-
-    if not reactor.valid or reactor.temperature < critical_threshold then
-      global["nuclear-reactor"]["critical"][unit_number] = nil
-    else
-      if reactor.temperature > meltdown_threshold then
-        global["nuclear-reactor"]["meltdown"][reactor.unit_number] = reactor
-      else
-        reactor.active = true
-      end
-    end
+  -- ensure each reactor is serviced at least once every 100 seconds
+  for i = 0, math.ceil(queue.length(global["nuclear-reactor"]["all"]) / 100), 1 do
+    nuclear_reactor.once()
   end
 end
 
--- reactors above the `meltdown_threshold` it will get monitored every tick
-function nuclear_reactor.every_tick()
-  for unit_number, reactor in pairs(global["nuclear-reactor"]["meltdown"]) do
-
-    if not reactor.valid or reactor.temperature < meltdown_threshold then
-      global["nuclear-reactor"]["meltdown"][unit_number] = nil
-    else
-      if reactor.temperature > notgreat_threshold then
-         reactor.active = false
-      else
-         reactor.active = true
-      end
-    end
-  end
-end
 
 return nuclear_reactor
