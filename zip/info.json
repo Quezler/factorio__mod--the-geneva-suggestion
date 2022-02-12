@@ -11,8 +11,9 @@
     "incompatible"
   ],
   "dependencies": [
-    "? base >= 1.1",
+    "flib",
 
+    "? base >= 1.1",
     "? aai-containers",
     "? miniloader",
     "? Krastorio2",
