@@ -77,7 +77,6 @@ function nuclear_reactor.handle_one_active(reactor)
   if reactor.temperature > deactivate_above then
     queue.push_right(global["nuclear-reactor"]["inactive"], reactor)
     reactor.active = false
-    --reactor.surface.create_entity{name = "flying-text", position = reactor.position, text = "[virtual-signal=signal-red]"}
   else
     queue.push_right(global["nuclear-reactor"]["inactive"], reactor)
     if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
@@ -101,7 +100,6 @@ function nuclear_reactor.handle_one_inactive(reactor)
   if reactor.temperature < reactivate_under then
     queue.push_right(global["nuclear-reactor"]["active"], reactor)
     reactor.active = true
-    --reactor.surface.create_entity{name = "flying-text", position = reactor.position, text = "[virtual-signal=signal-green]"}
   else
     queue.push_right(global["nuclear-reactor"]["inactive"], reactor)
   end
