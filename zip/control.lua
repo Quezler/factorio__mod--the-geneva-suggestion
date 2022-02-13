@@ -1,3 +1,5 @@
+local on_tick_n = require("__flib__.on-tick-n")
+
 local util = require("scripts.util")
 
 local programmable_speaker = require("scripts.programmable-speaker")
@@ -17,6 +19,7 @@ local function init()
 
   log("Retrieving the royal ordnance L30a1 120mm rifled gun emplacement we have conveniently stored in the basement.")
 
+  on_tick_n.init()
   train_stop.on_init()
   rock_repair.init()
   kr_air_purifier.init()
@@ -157,10 +160,14 @@ end)
 
 -- ticks
 
+script.on_event(defines.events.on_tick, function(event)
+  nuclear_reactor.on_tick(event)
+end)
+
+
 script.on_nth_tick(60 * 1, function()
   rock_repair.on_nth_tick()
   buffer_overflow.every_second()
-  nuclear_reactor.every_second()
 end)
 
 script.on_nth_tick(60 * 60 * 5, function()
