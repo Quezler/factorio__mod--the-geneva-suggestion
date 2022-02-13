@@ -1,23 +1,15 @@
 -- @feature nuclear reactors stop using fuel while at max heat
 -- @feature construction robots refuel nuclear reactors
 
--- assume a reactor can heat up by 10 heat per second
-
-local queue = require("__flib__.queue")
 local on_tick_n = require("__flib__.on-tick-n")
 local construction_robot = require("construction-robot")
 
 local nuclear_reactor = {}
 
-local deactivate_above = 750
-local reactivate_under = 750
-
 function nuclear_reactor.init()
   global["nuclear-reactor"] = {}
 
---   global["nuclear-reactor"]["active"] = queue.new()
---   global["nuclear-reactor"]["inactive"] = queue.new()
---   global["nuclear-reactor"]["deliveries"] = {}
+  global["nuclear-reactor"]["deliveries"] = {}
 
   for _, surface in pairs(game.surfaces) do
     for _, entity in pairs(surface.find_entities_filtered{type = "reactor", name = "nuclear-reactor"}) do
@@ -35,96 +27,70 @@ function nuclear_reactor.on_created_entity(event)
   end
 end
 
--- function nuclear_reactor.on_entity_destroyed(event)
---   if global["nuclear-reactor"]["deliveries"][event.registration_number] then
---     local reactor = global["nuclear-reactor"]["deliveries"][event.registration_number]
---     global["nuclear-reactor"]["deliveries"][event.registration_number] = nil
---
---     if reactor and reactor.valid then
---
---       local used = reactor.get_inventory(defines.inventory.burnt_result)
---       if not used.is_empty() then
---
---         local robot = reactor.surface.find_entity("construction-robot", reactor.position)
---         if robot then
---
---           local cargo = robot.get_inventory(defines.inventory.robot_cargo)
---           if cargo.is_empty() then
---
---             for name, count in pairs(used.get_contents()) do
---               cargo.insert({name = name, count = count})
---             end
---
---             used.clear()
---           end
---         end
---       end
---     end
---   end
--- end
+function nuclear_reactor.on_entity_destroyed(event)
+  if global["nuclear-reactor"]["deliveries"][event.registration_number] then
+    local reactor = global["nuclear-reactor"]["deliveries"][event.registration_number]
+    global["nuclear-reactor"]["deliveries"][event.registration_number] = nil
 
--- function nuclear_reactor.handle_one_active(reactor)
---   local reactor = queue.pop_left(global["nuclear-reactor"]["active"])
---   if not reactor or not reactor.valid then return end
---
---   if reactor.temperature > deactivate_above then
---     queue.push_right(global["nuclear-reactor"]["inactive"], reactor)
---     reactor.active = false
---   else
---     queue.push_right(global["nuclear-reactor"]["inactive"], reactor)
---     if reactor.get_inventory(defines.inventory.fuel).get_item_count() == 0 then
---
---       if table_size(reactor.neighbours) < 4 then
---
---         if not construction_robot.pending_delivery(reactor) then
---           local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
---           global["nuclear-reactor"]["deliveries"][script.register_on_entity_destroyed(proxy)] = reactor
---         end
---       end
---     end
---   end
--- end
+    if reactor and reactor.valid then
 
--- function nuclear_reactor.handle_one_inactive(reactor)
---   local reactor = queue.pop_left(global["nuclear-reactor"]["inactive"])
---   if not reactor or not reactor.valid then return end
---
---   if reactor.temperature < reactivate_under then
---     queue.push_right(global["nuclear-reactor"]["active"], reactor)
---     reactor.active = true
---   else
---     queue.push_right(global["nuclear-reactor"]["inactive"], reactor)
---   end
--- end
+      local used = reactor.get_inventory(defines.inventory.burnt_result)
+      if not used.is_empty() then
 
--- function nuclear_reactor.every_second()
---   if queue.length(global["nuclear-reactor"]["active"]) > 0 then
---     nuclear_reactor.handle_one_active()
---   end
---   if queue.length(global["nuclear-reactor"]["inactive"]) > 0 then
---     nuclear_reactor.handle_one_inactive()
---   end
---
--- --   game.print("active: " .. queue.length(global["nuclear-reactor"]["active"]))
--- --   game.print("inactive: " .. queue.length(global["nuclear-reactor"]["inactive"]))
--- end
+        local robot = reactor.surface.find_entity("construction-robot", reactor.position)
+        if robot then
+
+          local cargo = robot.get_inventory(defines.inventory.robot_cargo)
+          if cargo.is_empty() then
+
+            for name, count in pairs(used.get_contents()) do
+              cargo.insert({name = name, count = count})
+            end
+
+            used.clear()
+          end
+        end
+      end
+    end
+  end
+end
+
+local data_raws = {}
+local function data_raw(entity)
+  if not data_raws[entity.name] then
+    local i = string.find(entity.prototype.order, "raw")
+    local eval = string.sub(entity.prototype.order, i)
+    load(eval)()
+    data_raws[entity.name] = raw
+  end
+
+  return data_raws[entity.name]
+end
 
 function nuclear_reactor.handle(reactor)
   if not reactor or not reactor.valid then return end
+  if not reactor.active then reactor.active = true end
 
-  reactor.surface.create_entity{name = "flying-text", position = reactor.position, text = "meltdown?"}
-  if reactor.temperature > 999 then
-    reactor.active = false
-  end
+  reactor.surface.create_entity{name = "flying-text", position = reactor.position, text = "[item=uranium-fuel-cell]"}
 
-  if reactor.active then
-    local max_temperature           = 1000 -- data.raw["reactor"]["nuclear-reactor"].heat_buffer.max_temperature
-    local consumption   = 40 * 1000 * 1000 -- data.raw["reactor"]["nuclear-reactor"].consumption = "40MW"
-    local specific_heat = 10 * 1000 * 1000 -- data.raw["reactor"]["nuclear-reactor"].heat_buffer.specific_heat = "10MJ"
---     local productivity  = 1 + table_size(reactor.neighbours) * reactor.prototype.neighbour_bonus
+  local prototype = data_raw(reactor)
+  local seconds_until_depleted = math.ceil(reactor.burner.remaining_burning_fuel / prototype.consumption)
 
-    local seconds_till_meltdown = (max_temperature - reactor.temperature) * specific_heat / (consumption * productivity) -- 250 @ 0° (246.25 @ 15°)
-    on_tick_n.add(game.tick + 1 + math.ceil(seconds_till_meltdown * 60), {name = "nuclear-reactor", entity = reactor})
+  if seconds_until_depleted > 0 then
+  -- reschedule the handler for when the fuel that currently burns runs out
+    on_tick_n.add(game.tick + 1 + (seconds_until_depleted * 60), {name = "nuclear-reactor", entity = reactor})
+  else
+    if reactor.temperature < (prototype.max_temperature * 0.75) and table_size(reactor.neighbours) < 4 then
+    -- request a new fuel cell when temperature drops below 75%
+      if not construction_robot.pending_delivery(reactor) then
+        local proxy = construction_robot.deliver(reactor, {["uranium-fuel-cell"] = 1})
+        global["nuclear-reactor"]["deliveries"][script.register_on_entity_destroyed(proxy)] = reactor
+      end
+    end
+
+    -- while seconds_until_depleted is zero it means nothing is getting burned and no new fuel was found
+    local seconds_per_fuel = game.item_prototypes["uranium-fuel-cell"].fuel_value / prototype.consumption -- 200
+    on_tick_n.add(game.tick + 1 + math.floor(seconds_per_fuel * 60 * 0.25), {name = "nuclear-reactor", entity = reactor})
   end
 end
 
