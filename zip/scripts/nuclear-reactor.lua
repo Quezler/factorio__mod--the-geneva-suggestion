@@ -6,8 +6,8 @@ local queue = require("__flib__.queue")
 
 local nuclear_reactor = {}
 
-local deactivate_above = 900
-local reactivate_under = 900
+local deactivate_above = 750
+local reactivate_under = 750
 
 function nuclear_reactor.init()
   global["nuclear-reactor"] = {}
@@ -33,10 +33,8 @@ function nuclear_reactor.on_created_entity(event)
 
   if entity.type == "reactor" and entity.name == "nuclear-reactor" then
     if entity.active then
-      game.print("active")
       queue.push_left(global["nuclear-reactor"]["active"], entity)
     else
-      game.print("inactive")
       queue.push_left(global["nuclear-reactor"]["inactive"], entity)
     end
   end
