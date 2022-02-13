@@ -42,6 +42,7 @@ These optional features are active when each +'d mod is loaded:
 - data: disables the containers from krastorio 2
 
 ### base
+- data: pumps require no power
 - data: allows big electric poles and substations to fast-replace each other
 - data: reverses the beacon animation to pulse into the ground
 
