@@ -8,6 +8,10 @@ local function round(number, decimals)
 end
 
 function pollution_tool.per_minute(entity)
+  if entity.name == "tile-ghost" or entity.name == "entity-ghost" then
+    return 0
+  end
+
   local energy_multiplier, pollution_multiplier = 1, 1
 
   if entity.effects then
