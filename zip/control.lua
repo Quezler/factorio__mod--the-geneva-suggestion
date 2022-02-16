@@ -6,11 +6,11 @@ local programmable_speaker = require("scripts.programmable-speaker")
 local train_stop           = require("scripts.train-stop")
 local rock_repair          = require("scripts.rock-repair")
 local kr_air_purifier      = require("scripts.kr-air-purifier")
-local buffer_overflow      = require("scripts.buffer-overflow")
 local bloemfontein         = require("scripts.bloemfontein")
 local constant_combinator  = require("scripts.constant-combinator")
 local nuclear_reactor      = require("scripts.nuclear-reactor")
 local pollution_tool       = require("scripts.pollution-tool")
+local pinecone             = require("scripts.pinecone")
 
 -- init
 
@@ -23,9 +23,9 @@ local function init()
   train_stop.on_init()
   rock_repair.init()
   kr_air_purifier.init()
-  buffer_overflow.init()
   bloemfontein.init()
   nuclear_reactor.init()
+  pinecone.init()
 end
 
 script.on_init(function()
@@ -51,33 +51,33 @@ end)
 script.on_event(defines.events.on_built_entity, function(event)
   train_stop.on_built_entity(event)
   kr_air_purifier.on_created_entity(event)
-  buffer_overflow.on_created_entity(event)
   nuclear_reactor.on_created_entity(event)
+  pinecone.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
   train_stop.on_robot_built_entity(event)
   kr_air_purifier.on_created_entity(event)
-  buffer_overflow.on_created_entity(event)
   nuclear_reactor.on_created_entity(event)
+  pinecone.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_built, function(event)
   kr_air_purifier.on_created_entity(event)
-  buffer_overflow.on_created_entity(event)
   nuclear_reactor.on_created_entity(event)
+  pinecone.on_created_entity(event)
 end)
 
 script.on_event(defines.events.script_raised_revive, function(event)
   kr_air_purifier.on_created_entity(event)
-  buffer_overflow.on_created_entity(event)
   nuclear_reactor.on_created_entity(event)
+  pinecone.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_cloned, function(event)
   kr_air_purifier.on_created_entity(event)
-  buffer_overflow.on_created_entity(event)
   nuclear_reactor.on_created_entity(event)
+  pinecone.on_created_entity(event)
 end)
 
 script.on_event(defines.events.on_entity_renamed, function(event)
@@ -94,8 +94,8 @@ script.on_event(defines.events.on_entity_destroyed, function(event)
 end)
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
-  buffer_overflow.on_selected_entity_changed(event)
   bloemfontein.on_selected_entity_changed(event)
+  pinecone.on_selected_entity_changed(event)
 end)
 
 script.on_event(defines.events.on_train_changed_state, function(event)
@@ -161,13 +161,17 @@ end)
 -- ticks
 
 script.on_event(defines.events.on_tick, function(event)
-  nuclear_reactor.on_tick(event)
+  for _, task in pairs(on_tick_n.retrieve(event.tick) or {}) do
+    if task.script == "nuclear-reactor" then
+      nuclear_reactor.on_task(task.entity)
+    elseif task.script == "pinecone" then
+      pinecone.on_task(task)
+    end
+  end
 end)
-
 
 script.on_nth_tick(60 * 1, function()
   rock_repair.on_nth_tick()
-  buffer_overflow.every_second()
 end)
 
 script.on_nth_tick(60 * 60 * 5, function()

@@ -78,7 +78,7 @@ function nuclear_reactor.handle(reactor)
 
   if seconds_until_depleted > 0 then
   -- reschedule the handler for when the fuel that currently burns runs out
-    on_tick_n.add(game.tick + 1 + (seconds_until_depleted * 60), {name = "nuclear-reactor", entity = reactor})
+    on_tick_n.add(game.tick + 1 + (seconds_until_depleted * 60), {script = "nuclear-reactor", entity = reactor})
   else
     if reactor.temperature < (prototype.max_temperature * 0.75) and table_size(reactor.neighbours) < 4 then
     -- request a new fuel cell when temperature drops below 75%
@@ -90,16 +90,12 @@ function nuclear_reactor.handle(reactor)
 
     -- while seconds_until_depleted is zero it means nothing is getting burned and no new fuel was found
     local seconds_per_fuel = game.item_prototypes["uranium-fuel-cell"].fuel_value / prototype.consumption -- 200
-    on_tick_n.add(game.tick + 1 + math.floor(seconds_per_fuel * 60 * 0.25), {name = "nuclear-reactor", entity = reactor})
+    on_tick_n.add(game.tick + 1 + math.floor(seconds_per_fuel * 60 * 0.25), {script = "nuclear-reactor", entity = reactor})
   end
 end
 
-function nuclear_reactor.on_tick(event)
-  for _, task in pairs(on_tick_n.retrieve(event.tick) or {}) do
-    if task.name == "nuclear-reactor" then
-      nuclear_reactor.handle(task.entity)
-    end
-  end
+function nuclear_reactor.on_task(event)
+  nuclear_reactor.handle(task.entity)
 end
 
 

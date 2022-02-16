@@ -23,6 +23,8 @@ These optional features are active when each +'d mod is loaded:
 
 ### (always)
 - data: prevents walls from graphically connecting to water or cliffs
+- script: logistic chests with a deconstruction planner signal of -1 drop unrequested items on the ground
+- script: logistic chests with a deconstruction planner signal of -2 drop overstocked items on the ground
 - script: nuclear reactors stop using fuel while at max heat
 - script: construction robots refuel nuclear reactors
 - script: converts rich text to their [img= variant on gui close (helps with LTN)
